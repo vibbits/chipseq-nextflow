@@ -20,6 +20,7 @@ results/*
 *.fa
 *.sam
 *.bam
+*.bt2
 
 # Nextflow ignoring
 .nextflow*

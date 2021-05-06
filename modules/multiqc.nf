@@ -3,8 +3,6 @@
 // This is needed for activating the new DLS2
 nextflow.enable.dsl=2
 
-// Folder where (general) output results will be stored. 
-params.outdir = "$launchDir/results"
 
 process multiqc {
     publishDir("$params.outdir/multiqc/", mode: 'copy', overwrite: true)

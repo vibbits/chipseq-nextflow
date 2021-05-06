@@ -3,8 +3,6 @@
 // This is needed for activating the new DLS2
 nextflow.enable.dsl=2
 
-params.outdir = "$launchDir/results"
-
 // Process trimmomatic
 process trimmomatic {
     publishDir "$params.outdir/trimmed-reads", mode: 'copy' , overwrite: true
@@ -16,13 +14,25 @@ process trimmomatic {
     tuple val(sample), path(reads) 
 
     output:
-    tuple val("${sample}"), path("${sample}*_P.fq"), emit: trim_fq
-    tuple val("${sample}"), path("${sample}*_U.fq"), emit: untrim_fq
+    tuple val("${sample}"), path("${sample}*.paired.fq"), emit: trim_fq
+    tuple val("${sample}"), path("${sample}*.unpaired.fq"), emit: untrim_fq
     
     script:
     """
     mkdir -p $params.outdir/trimmed-reads/
-    trimmomatic PE -threads $params.threads ${reads[0]} ${reads[1]} ${sample}1_P.fq ${sample}1_U.fq ${sample}2_P.fq ${sample}2_U.fq $params.slidingwindow $params.avgqual 
+    trimmomatic PE \\
+        -threads $params.threads \\
+        ${reads[0]} \\
+        ${reads[1]} \\
+        ${sample}1.paired.fq \\
+        ${sample}1.unpaired.fq \\
+        ${sample}2.paired.fq \\
+        ${sample}2.unpaired.fq \\
+        $params.illuminaclip \\
+        $params.leading \\
+        $params.trailing \\
+        $params.slidingwindow \\
+        $params.minlen 
     """
-}
+}    
 

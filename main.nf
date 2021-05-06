@@ -11,21 +11,7 @@ println """\
 Data-folder      : $params.projdir
 Results-folder   : $params.outdir
 
-================================
-      INPUT & REFERENCES 
-Input-files      : $params.reads
-Reference genome : $params.genome
-GTF-file         : $params.gtf
-
-================================
-          TRIMMOMATIC
-Sliding window   : $params.slidingwindow
-Average quality  : $params.avgqual
-
-================================
-             STAR
-Length-reads     : $params.lengthreads
-SAindexNbases    : $params.genomeSAindexNbases
+...
 
 ================================
 """
@@ -36,11 +22,13 @@ read_pairs_ch = Channel
         .fromFilePairs(params.reads, checkIfExists:true)
 
 genome = file(params.genome)
-gtf = file(params.gtf)
+//gtf = file(params.gtf)
+//bt2idx = file(params.bt2idx)
 
 include { fastqc as fastqc_raw; fastqc as fastqc_trim } from "${launchDir}/modules/fastqc" //addParams(OUTPUT: fastqcOutputFolder)
-include { star_idx; star_alignment } from "${launchDir}/modules/star"
 include { trimmomatic } from "${launchDir}/modules/trimmomatic"
+include { kseq_test } from "${launchDir}/modules/kseq_test"
+include { bowtie_idx; bowtie_alignment } from "${launchDir}/modules/bowtie"
 include { multiqc } from "${launchDir}/modules/multiqc" 
 
 // Running a workflow with the defined processes here.  
@@ -50,12 +38,14 @@ workflow {
 	
   // Trimming & QC
   trimmomatic(read_pairs_ch)
-  fastqc_trim(trimmomatic.out.trim_fq)
 	
+  // kseq_test
+  kseq_test(trimmomatic.out.trim_fq)
+
   // Mapping
-  star_idx(genome, gtf)
-  star_alignment(trimmomatic.out.trim_fq, star_idx.out.index, gtf)
+  bowtie_idx(genome)
+  bowtie_alignment(kseq_test.out.kseq_test_fq, (bowtie_idx.out.index).collect())
   
   // Multi QC on all results
-  multiqc((fastqc_raw.out.fastqc_out).mix(fastqc_trim.out.fastqc_out).collect())
+  //multiqc((fastqc_raw.out.fastqc_out).mix(fastqc_trim.out.fastqc_out).collect())
 }

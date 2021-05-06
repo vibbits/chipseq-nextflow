@@ -3,7 +3,6 @@
 // This is needed for activating the new DLS2
 nextflow.enable.dsl=2
 
-params.outdir = "$launchDir/results"
 
 process fastqc {
   publishDir "$params.outdir/quality-control-$sample/", mode: 'copy', overwrite: true
