@@ -8,7 +8,7 @@ println """\
       LIST OF PARAMETERS
 ================================
             GENERAL
-Data-folder      : $params.projdir
+Data-folder      : $params.datadir
 Results-folder   : $params.outdir
 
 ...
