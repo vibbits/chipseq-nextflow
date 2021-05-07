@@ -13,12 +13,12 @@ process kseq_test {
   tuple val(sample), path(reads)
 
   output:
-  tuple val("${sample}"), path("${sample}*.kseq.fq"), emit: kseq_test_fq
+  tuple val("${sample}"), path("${sample}*.kseq.fq.gz"), emit: kseq_test_fq
 
   script:
   //mkdir -p $params.outdir/quality-control-$sample/  
   """
-  kseq_test ${reads[0]} ${params.len} ${sample}1.kseq.fq
-  kseq_test ${reads[1]} ${params.len} ${sample}2.kseq.fq
+  kseq_test ${reads[0]} ${params.len} ${sample}1.kseq.fq.gz
+  kseq_test ${reads[1]} ${params.len} ${sample}2.kseq.fq.gz
   """
 }
