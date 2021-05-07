@@ -32,7 +32,7 @@ process bowtie_alignment {
     tuple val(bt2idx), path(bt2idx_files)
 
     output:
-    path("${reads}.sam"), emit: aligend_reads_sam
+    path("${sample}.sam"), emit: aligend_reads_sam
 
     script:
     """
