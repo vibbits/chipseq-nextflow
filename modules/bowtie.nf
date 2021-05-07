@@ -41,8 +41,7 @@ process bowtie_alignment {
         --phred33 \\
         -x ${bt2idx} \\
         -1 ${reads[0]} \\
-        -2 ${reads[1]} \\
-        -S ${reads}.sam
+        -2 ${reads[1]} 
     """
     // Pipe to: (but need one container with both bowtie and samtools in it then)
     // samtools view -bS - > ${outdir}/mapped-reads/${sample}_aligned_reads.bam
