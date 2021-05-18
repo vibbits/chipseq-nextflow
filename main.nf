@@ -25,11 +25,11 @@ genome = file(params.genome)
 //gtf = file(params.gtf)
 //bt2idx = file(params.bt2idx)
 
-include { fastqc as fastqc_raw; fastqc as fastqc_trim } from "${launchDir}/modules/fastqc" //addParams(OUTPUT: fastqcOutputFolder)
-include { trimmomatic } from "${launchDir}/modules/trimmomatic"
-include { kseq_test } from "${launchDir}/modules/kseq_test"
-include { bowtie_idx; bowtie_alignment } from "${launchDir}/modules/bowtie"
-include { multiqc } from "${launchDir}/modules/multiqc" 
+include { fastqc as fastqc_raw; fastqc as fastqc_trim } from "./modules/fastqc" //addParams(OUTPUT: fastqcOutputFolder)
+include { trimmomatic } from "./modules/trimmomatic"
+include { kseq_test } from "./modules/kseq_test"
+include { bowtie_idx; bowtie_alignment } from "./modules/bowtie"
+include { multiqc } from "./modules/multiqc" 
 
 // Running a workflow with the defined processes here.  
 workflow {
